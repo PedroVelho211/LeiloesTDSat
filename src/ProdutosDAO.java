@@ -74,7 +74,10 @@ public class ProdutosDAO {
         return listagem;
     }
     
-//    COPILOT CHEAT
+
+    
+    
+    
     
     public void venderProduto(int produtoId) {
     conn = new conectaDAO().connectDB();
@@ -101,38 +104,7 @@ public class ProdutosDAO {
  
     
     
-    public ArrayList<ProdutosDTO> listarProdutosVendidos() {
-    conn = new conectaDAO().connectDB();
-    ArrayList<ProdutosDTO> produtosVendidos = new ArrayList<>();
-    String sql = "SELECT * FROM produtos WHERE status = ?";
-
-    try {
-        prep = conn.prepareStatement(sql);
-        prep.setString(1, "Vendido");
-        resultset = prep.executeQuery();
-
-        while (resultset.next()) {
-            ProdutosDTO produto = new ProdutosDTO();
-            produto.setId(resultset.getInt("id"));
-            produto.setNome(resultset.getString("nome"));
-            produto.setValor(resultset.getInt("valor"));
-            produto.setStatus(resultset.getString("status"));
-
-            produtosVendidos.add(produto);
-        }
-    } catch (SQLException ex) {
-        Logger.getLogger(ProdutosDAO.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-        try {
-            if (resultset != null) resultset.close();
-            if (prep != null) prep.close();
-            if (conn != null) conn.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(ProdutosDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    return produtosVendidos;
-}
+    
     
     
   
