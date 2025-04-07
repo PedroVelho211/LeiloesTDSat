@@ -74,8 +74,69 @@ public class ProdutosDAO {
         return listagem;
     }
     
+//    COPILOT CHEAT
+    
+    public void venderProduto(int produtoId) {
+    conn = new conectaDAO().connectDB();
+
+    try {
+        String sql = "UPDATE produtos SET status = ? WHERE id = ?";
+        prep = conn.prepareStatement(sql);
+        prep.setString(1, "Vendido"); // Atualiza o status para "Vendido"
+        prep.setInt(2, produtoId); // Identifica o produto pelo ID
+        prep.executeUpdate();
+
+        JOptionPane.showMessageDialog(null, "Produto vendido com sucesso!");
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, "Erro ao atualizar status: " + ex.getMessage());
+    } finally {
+        try {
+            if (prep != null) prep.close();
+            if (conn != null) conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProdutosDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+}
+ 
     
     
-        
+    public ArrayList<ProdutosDTO> listarProdutosVendidos() {
+    conn = new conectaDAO().connectDB();
+    ArrayList<ProdutosDTO> produtosVendidos = new ArrayList<>();
+    String sql = "SELECT * FROM produtos WHERE status = ?";
+
+    try {
+        prep = conn.prepareStatement(sql);
+        prep.setString(1, "Vendido");
+        resultset = prep.executeQuery();
+
+        while (resultset.next()) {
+            ProdutosDTO produto = new ProdutosDTO();
+            produto.setId(resultset.getInt("id"));
+            produto.setNome(resultset.getString("nome"));
+            produto.setValor(resultset.getInt("valor"));
+            produto.setStatus(resultset.getString("status"));
+
+            produtosVendidos.add(produto);
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(ProdutosDAO.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+        try {
+            if (resultset != null) resultset.close();
+            if (prep != null) prep.close();
+            if (conn != null) conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProdutosDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    return produtosVendidos;
+}
+    
+    
+  
+
+
 }
 
